@@ -10,6 +10,30 @@
       "type": "dart",
       "program": "bin/server.dart",
       // "preLaunchTask": "dart: dart pub run build_runner watch"
+    },
+    {
+      "name": "Cloud Run: Run/Debug Locally",
+      "type": "cloudcode.cloudrun",
+      "request": "launch",
+      "build": {
+        "docker": {
+          "path": "Dockerfile"
+        }
+      },
+      "image": "create-section",
+      "service": {
+        "name": "create-section",
+        "containerPort": 8080,
+        "resources": {
+          "limits": {
+            "memory": "256Mi"
+          }
+        }
+      },
+      "target": {
+        "minikube": {}
+      },
+      "watch": true
     }
   ]
 }

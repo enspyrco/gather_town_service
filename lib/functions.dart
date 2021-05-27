@@ -5,19 +5,36 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:http/http.dart' as http;
 import 'package:shelf/shelf.dart' as shelf;
 
+import 'originalJson.dart';
+import 'updatedJson.dart';
+
 final client = http.Client();
 
 @CloudFunction()
 Future<shelf.Response> function(shelf.Request request) async {
-  // return _saveMap('saved.json');
+  // return _getMap('saved.json', queryParameters);
 
-  // return _setMap('original.json');
-  return _setMap('updated.json');
+  try {
+    // Get the gather.town credentials - from local file if running locally
+    // or from environment variable if in Cloud Run.
+    final envVars = Platform.environment;
+    final credentials = envVars['CREDENTIALS'];
+    final queryParameters = (credentials != null)
+        ? json.decode(credentials)
+        : json.decode(File('credentials.json').readAsStringSync());
+
+    // Retrieve the map name from the query parameters.
+    final mapName =
+        '${request.requestedUri.queryParameters['map'] ?? 'original'}';
+
+    return _setMap(mapName, queryParameters);
+  } catch (error, trace) {
+    return shelf.Response.ok('Error: $error\n\n$trace');
+  }
 }
 
-Future<shelf.Response> _saveMap(String fileName) async {
-  final queryParameters =
-      json.decode(File('credentials.json').readAsStringSync());
+Future<shelf.Response> _getMap(
+    String fileName, Map<String, dynamic> queryParameters) async {
   final getUri = Uri.https('gather.town', '/api/getMap', queryParameters);
 
   final response = await client.get(getUri, headers: {
@@ -28,12 +45,14 @@ Future<shelf.Response> _saveMap(String fileName) async {
   return shelf.Response.ok('Response body saved.');
 }
 
-Future<shelf.Response> _setMap(String fileName) async {
+Future<shelf.Response> _setMap(
+    String mapName, Map<String, dynamic> queryParameters) async {
   final setUri = Uri.https('gather.town', '/api/setMap');
-  final queryParameters =
-      json.decode(File('credentials.json').readAsStringSync());
-  queryParameters['mapContent'] =
-      json.decode(File(fileName).readAsStringSync());
+
+  print('Setting to: $mapName map');
+  final mapJson = (mapName == 'original') ? originalJson : updatedJson;
+  queryParameters['mapContent'] = json.decode(mapJson);
+
   final response = await client.post(setUri,
       body: json.encode(queryParameters),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'});
