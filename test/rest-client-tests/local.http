@@ -2,7 +2,7 @@
 @baseUrl = http://localhost:8080
 
 ### 
-GET {{baseUrl}}/?map=original
+GET {{baseUrl}}/?delta=showGame
 
 ### 
-GET {{baseUrl}}/?map=updated
+GET {{baseUrl}}/?delta=hideGame
