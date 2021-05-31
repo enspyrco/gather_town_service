@@ -1,61 +1,36 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:functions_framework/functions_framework.dart';
-import 'package:http/http.dart' as http;
-import 'package:shelf/shelf.dart' as shelf;
+import 'package:gather_town_service/utils/locator.dart';
+import 'package:shelf/shelf.dart';
 
-import 'originalJson.dart';
-import 'updatedJson.dart';
-
-final client = http.Client();
+// We are using a ServiceLocator to hold the services, so we can easily check
+// what is already available and only create services as required.
+//
+// The service locator pattern is also useful for testing, particularly in a
+// serverless context where we cannot use constructor injection for the
+// top-level function.
+//
+// The locator is in the global scope so, combined with lazy loading of
+// services, should give us the best of both worlds - reducing cold start times
+// and improving performance on warm starts.
 
 @CloudFunction()
-Future<shelf.Response> function(shelf.Request request) async {
-  // return _getMap('saved.json', queryParameters);
-
+Future<Response> function(Request request) async {
   try {
-    // Get the gather.town credentials - from local file if running locally
-    // or from environment variable if in Cloud Run.
-    final envVars = Platform.environment;
-    final credentials = envVars['CREDENTIALS'];
-    final queryParameters = (credentials != null)
-        ? json.decode(credentials)
-        : json.decode(File('credentials.json').readAsStringSync());
+    // The service locator will return the service if it exists or create it.
+    final mapService = await Locator.getMapServiceAsync();
 
-    // Retrieve the map name from the query parameters.
-    final mapName =
-        '${request.requestedUri.queryParameters['map'] ?? 'original'}';
+    // Retrieve the delta from the query and call the corresponding function
+    final delta = request.requestedUri.queryParameters['delta'] ??
+        (throw 'Request must include a valid delta, params: ${request.requestedUri.queryParameters}');
 
-    return _setMap(mapName, queryParameters);
+    // Apply the requested change and push the new map to the gather town server
+    mapService.apply(delta);
+    final httpResponse = await mapService.push();
+
+    print(httpResponse.body);
+    return Response.ok(httpResponse.body);
   } catch (error, trace) {
-    return shelf.Response.ok('Error: $error\n\n$trace');
+    print('$error\n\n${trace.toString()}');
+    return Response.ok('Error: $error\n\n$trace');
   }
-}
-
-Future<shelf.Response> _getMap(
-    String fileName, Map<String, dynamic> queryParameters) async {
-  final getUri = Uri.https('gather.town', '/api/getMap', queryParameters);
-
-  final response = await client.get(getUri, headers: {
-    HttpHeaders.contentTypeHeader: 'application/json',
-  });
-  File(fileName).writeAsStringSync(response.body);
-
-  return shelf.Response.ok('Response body saved.');
-}
-
-Future<shelf.Response> _setMap(
-    String mapName, Map<String, dynamic> queryParameters) async {
-  final setUri = Uri.https('gather.town', '/api/setMap');
-
-  print('Setting to: $mapName map');
-  final mapJson = (mapName == 'original') ? originalJson : updatedJson;
-  queryParameters['mapContent'] = json.decode(mapJson);
-
-  final response = await client.post(setUri,
-      body: json.encode(queryParameters),
-      headers: {HttpHeaders.contentTypeHeader: 'application/json'});
-
-  return shelf.Response.ok(response.body);
 }
