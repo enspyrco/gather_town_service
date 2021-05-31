@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:gather_town_service/typedefs.dart';
+import 'package:gather_town_service/utils/typedefs.dart';
 import 'package:http/http.dart' as http;
-import 'package:shelf/shelf.dart' as shelf;
 
 class GatherTownApiService {
-  final _client = http.Client();
+  late final _client;
   late final Map<String, String> _credentials;
   late final Uri _getUri;
+  final _setUri = Uri.https('gather.town', '/api/setMap');
   final _setBody = <String, Object?>{};
 
-  GatherTownApiService() {
+  GatherTownApiService([http.Client? client])
+      : _client = client ?? http.Client() {
     // Get the gather.town credentials - from local file if running locally
     // or from environment variable if in Cloud Run.
     final credentialsString = Platform.environment['CREDENTIALS'] ??
@@ -29,20 +30,18 @@ class GatherTownApiService {
     // Retrieve the current gather.town map & store in the member variable
     final response = await _client.get(_getUri,
         headers: {HttpHeaders.contentTypeHeader: 'application/json'});
-    print(response);
     return json.decode(response.body);
   }
 
-  Future<shelf.Response> setCurrent({required GatherTownMap map}) async {
+  Future<http.Response> setCurrent({required GatherTownMap map}) async {
+    // The request body needs to have the credentials (previously added) and
+    // the current map.
     _setBody['mapContent'] = map;
 
-    // TODO: remove if using getUri works
-    // final setUri = _getUri.replace(queryParameters: _setBody);
-
-    final response = await _client.post(_getUri,
+    final response = await _client.post(_setUri,
         body: json.encode(_setBody),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'});
 
-    return shelf.Response.ok(response.body);
+    return response;
   }
 }

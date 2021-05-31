@@ -2,21 +2,28 @@ import 'package:gather_town_service/functions.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'test-doubles/dart_core.mocks.dart';
-import 'test-doubles/shelf.mocks.dart';
+import 'test-doubles/mocks/dart_core.mocks.dart';
+import 'test-doubles/mocks/shelf.mocks.dart';
 
 const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
-  group('gather_town_service function', () {
-    test('creates an api service if none exists', () {
+  group('The gather_town_service function', () {
+    setUp(() {
+      // Locator.provideApiService(GatherTownApiService(MockClient()));
+    });
+    test('should create an api service if none exists', () async {
       final request = MockRequest();
       final uri = MockUri();
       when(request.requestedUri).thenReturn(uri);
       when(uri.queryParameters)
-          .thenReturn(<String, String>{'delta': 'showGame'});
+          .thenReturn(<String, String>{'delta': 'hideGame'});
 
-      function(request);
+      try {
+        await function(request);
+      } catch (error, trace) {
+        print('$error\n\n${trace.toString()}');
+      }
     });
   });
 }
