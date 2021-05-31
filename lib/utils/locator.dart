@@ -13,7 +13,7 @@ class Locator {
     return GatherTownMapService.create();
   }
 
-  static void provideService(
+  static void provide(
       {GatherTownApiService? apiService, GatherTownMapService? mapService}) {
     _apiService = apiService ?? _apiService;
     _mapService = mapService ?? _mapService;

@@ -10,14 +10,15 @@ const defaultTimeout = Timeout(Duration(seconds: 3));
 void main() {
   group('The gather_town_service function', () {
     setUp(() {
-      // Locator.provideApiService(GatherTownApiService(MockClient()));
+      // Locator.provide(apiService: GatherTownApiService(MockClient()));
     });
+
     test('should create an api service if none exists', () async {
       final request = MockRequest();
       final uri = MockUri();
       when(request.requestedUri).thenReturn(uri);
       when(uri.queryParameters)
-          .thenReturn(<String, String>{'delta': 'hideGame'});
+          .thenReturn(<String, String>{'delta': 'blockGame'});
 
       try {
         await function(request);
