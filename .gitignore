@@ -11,6 +11,3 @@ build/
 
 # Directory created by dartdoc
 doc/api/
-
-# Don't commit the gather.town credntials
-credentials.json

@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:gather_town_service/utils/locator.dart';
+import 'package:gather_town_service/services/gather_town_api_service.dart';
+import 'package:gather_town_service/utils/saved_objects.dart' as saved_objects;
 import 'package:gather_town_service/utils/typedefs.dart';
+import 'package:http/http.dart';
 
 final deltaFunctions = {'unblockGame': _unblockGame, 'blockGame': _blockGame};
 
@@ -11,16 +12,21 @@ final deltaFunctions = {'unblockGame': _unblockGame, 'blockGame': _blockGame};
 ///
 class GatherTownMapService {
   // Private constructor so there is only one option to create the service.
-  GatherTownMapService._(this._map)
-      : _allObjects =
-            AllObjects((_map['objects'] as List).cast<GatherTownObject>());
+  GatherTownMapService._(GatherTownApiService apiService, GatherTownMap map)
+      : _apiService = apiService,
+        _map = map,
+        _allObjects =
+            AllObjects((map['objects'] as List).cast<GatherTownObject>()) {
+    _syncMapState();
+  }
+
+  final GatherTownApiService _apiService;
 
   // The call to create makes an async api call to retrieve the current map.
   static Future<GatherTownMapService> create() async {
-    final apiService = Locator.getApiService();
+    final apiService = await GatherTownApiService.create();
     final map = await apiService.retrieveCurrentMap();
-    final service = GatherTownMapService._(map);
-    service._syncMapState();
+    final service = GatherTownMapService._(apiService, map);
     return service;
   }
 
@@ -46,15 +52,16 @@ class GatherTownMapService {
     }
 
     if (noBlockGameObjects) {
-      final treesString = File('block_game.json').readAsStringSync();
-      final blockGameObjects =
-          (jsonDecode(treesString) as List).cast<GatherTownObject>();
+      final blockGameObjects = (jsonDecode(saved_objects.blockGame) as List)
+          .cast<GatherTownObject>();
       _allObjects.removed['block_game'] = blockGameObjects;
     }
   }
 
   // Use the delta string to find the relevant function and call it.
   void apply(String delta) => deltaFunctions[delta]!(_allObjects);
+
+  Future<Response> push() => _apiService.pushCurrent(map: _map);
 }
 
 /// Keeps track of on and off-screen objects
@@ -76,6 +83,10 @@ void _unblockGame(AllObjects objects) {
     if (id != null && id.startsWith('block_game')) {
       treesForRemoval.add(object);
     }
+  }
+
+  for (final object in treesForRemoval) {
+    objects.mapObjects.remove(object);
   }
 }
 

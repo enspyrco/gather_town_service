@@ -14,14 +14,14 @@ void main() {
     });
 
     test('should create an api service if none exists', () async {
-      final request = MockRequest();
+      final mockRequest = MockRequest();
       final uri = MockUri();
-      when(request.requestedUri).thenReturn(uri);
+      when(mockRequest.requestedUri).thenReturn(uri);
       when(uri.queryParameters)
           .thenReturn(<String, String>{'delta': 'blockGame'});
 
       try {
-        await function(request);
+        await function(mockRequest);
       } catch (error, trace) {
         print('$error\n\n${trace.toString()}');
       }
