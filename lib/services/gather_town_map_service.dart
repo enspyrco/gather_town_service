@@ -16,9 +16,7 @@ class GatherTownMapService {
       : _apiService = apiService,
         _map = map,
         _allObjects =
-            AllObjects((map['objects'] as List).cast<GatherTownObject>()) {
-    _syncMapState();
-  }
+            AllObjects((map['objects'] as List).cast<GatherTownObject>());
 
   final GatherTownApiService _apiService;
 
@@ -27,6 +25,8 @@ class GatherTownMapService {
     final apiService = await GatherTownApiService.create();
     final map = await apiService.retrieveCurrentMap();
     final service = GatherTownMapService._(apiService, map);
+    // Check for objects missing from map and add to 'removed' list
+    service._syncMapState();
     return service;
   }
 

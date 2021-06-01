@@ -10,7 +10,7 @@ A Dart cloud function for updating a gather.town map.
 <details>
   <summary>One time setup</summary>
   
-  You'll need to add a file called `credentials.json` at the top level of the project, of the form: 
+  You'll need to [add a secret](https://cloud.google.com/secret-manager/docs/creating-and-accessing-secrets) to the GCP SecretManager, of the form: 
   ```json
   {
     "apiKey": "...",
@@ -18,6 +18,13 @@ A Dart cloud function for updating a gather.town map.
     "mapId": "study"
   }
   ```
+
+  - You can get an API key [here](https://gather.town/apiKeys).  
+  - The spaceId is the second half of the URL of your space, eg. 
+    - For gather.town/app/1234ABCD/MySpecialSpace 
+    - Use 1234ABCD\\\\MySpecialSpace (note the double back slash) 
+    - the mapId can be found in the MapMaker under the "Rooms" tab (bottom right of the screen)
+
 </details>
 
 Run the `functions_framework_builder` in watch mode:
