@@ -1,5 +1,5 @@
-const express = require('express');
-const app = express();
+import express from 'express';
+export const app = express();
 
 app.use(express.json());
 
@@ -25,5 +25,3 @@ app.post('/', (req, res) => {
   console.log(`Hello ${name}!`);
   res.status(204).send();
 });
-
-module.exports = app;
