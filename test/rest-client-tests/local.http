@@ -1,8 +1,0 @@
-# 
-@baseUrl = http://localhost:8080
-
-### 
-GET {{baseUrl}}/?delta=showGame
-
-### 
-GET {{baseUrl}}/?delta=hideGame

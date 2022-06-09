@@ -1,17 +1,20 @@
-################
-FROM google/dart:2.13
+FROM node:18-slim
 
-WORKDIR /app
-COPY pubspec.yaml /app/pubspec.yaml
-RUN dart pub get
+# Create and change to the app directory.
+WORKDIR /usr/src/app
+
+# Copy application dependency manifests to the container image.
+# A wildcard is used to ensure both package.json AND package-lock.json are copied.
+# Copying this separately prevents re-running npm install on every code change.
+COPY package*.json ./
+
+# Install dependencies.
+# If you add a package-lock.json speed your build by switching to 'npm ci'.
+# RUN npm ci --only=production
+RUN npm install --production
+
+# Copy local code to the container image.
 COPY . .
-RUN dart pub get --offline
 
-RUN dart pub run build_runner build --delete-conflicting-outputs
-RUN dart compile exe bin/server.dart -o bin/server
-
-########################
-FROM subfuzion/dart:slim
-COPY --from=0 /app/bin/server /app/bin/server
-EXPOSE 8080
-ENTRYPOINT ["/app/bin/server"]
+# Run the web service on container startup.
+CMD [ "npm", "start" ]
