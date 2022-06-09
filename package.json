@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node ./src --ext js,ts",
+    "build": "rm -rf build && tsc",
     "test": "mocha test/app.test.js --check-leaks",
     "system-test": "mocha test/system.test.js --timeout=360000 --exit"
   },
