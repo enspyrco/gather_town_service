@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "lib": [
+      "ESNext",
+      "ESNext.AsyncIterable",
+      // "DOM"
+    ],
+    // "noImplicitReturns": true,
+    "stripInternal": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "strict": true,
+    "noEmit": false,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "rootDir": "./src",
+    "outDir": "./build",
+    "types": [
+      "@types/node"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}
