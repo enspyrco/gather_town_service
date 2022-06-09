@@ -9,13 +9,12 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies.
-# If you add a package-lock.json speed your build by switching to 'npm ci'.
-# RUN npm ci --only=production
-RUN npm install --production
-RUN npm run build
+RUN npm ci
 
 # Copy local code to the container image.
 COPY . .
+
+RUN npm run build
 
 # Run the web service on container startup.
 CMD [ "npm", "start" ]
