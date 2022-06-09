@@ -1,11 +1,11 @@
-name: Build & deploy container.
+# name: Build & deploy container.
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
+# jobs:
 
   # the below is from enspyrco monorepo's CI that builds and deploys ci-tools 
   # container, but it uses dockerhub and I think we need to use google's 
