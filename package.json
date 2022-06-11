@@ -11,9 +11,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon --exec ts-node ./src --ext js,ts",
     "build": "rm -rf dist && tsc",
-    "test": "mocha test/app.test.js --check-leaks",
-    "ts-test": "ts-mocha test/**/*.ts",
-    "system-test": "mocha test/system.test.js --timeout=360000 --exit"
+    "test": ""
   },
   "dependencies": {
     "@gathertown/gather-game-client": "^37.0.1",
