@@ -2,6 +2,14 @@
 
 *A node.js server on Cloud Run providing multiple ways to interact with Gather’s WebSocket API.*
 
+## Missing files
+
+The app & some tests use a `.env` file at the top level of the project folder, with contents:
+```yml
+SPACE_ID: "<random_letters>\<name_you_chose>"
+API_KEY: "<its_a_secret>"
+```
+
 ## Run tests
 
 ### Typescript tests
