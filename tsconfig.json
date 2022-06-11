@@ -1,32 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "lib": [
-      "ESNext",
-      "ESNext.AsyncIterable",
-      // "DOM"
-    ],
-    // "noImplicitReturns": true,
-    "stripInternal": true,
-    "noUnusedLocals": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "sourceMap": true,
-    "strict": true,
-    "noEmit": false,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
-    "rootDir": "./src",
-    "outDir": "./build",
-    "types": [
-      "@types/node"
-    ]
+    "composite": true, // enforces constraints which make it possible for build tools (including ts) to quickly determine if a project has been built yet
+    "outDir": "build", // .js (as well as .d.ts, .js.map, etc.) files will be emitted into this directory.
+    "rootDir": "src", // specify the root folder within your source files.
+    "sourceMap": true, // enables the generation of sourcemap files.
+    "strict": true, // enables a wide range of type checking behavior that results in stronger guarantees of program correctness.
+    "esModuleInterop": true, // emit additional JavaScript to ease support for importing CommonJS modules.
+    "lib": ["esnext", "dom"] // specify a set of bundled library declaration files that describe the target runtime environment.
   },
   "exclude": [
     "node_modules",
-    "build",
-    "test",
+    "dist",
+    "test"
   ]
 }
