@@ -28,7 +28,7 @@ let request;
 
 describe('Unit Tests', () => {
   before(() => {
-    const { app } = require(path.join(__dirname, '..', 'build', 'app'));
+    const { app } = require(path.join(__dirname, '..', 'dist', 'app'));
     request = supertest(app);
   });
 

@@ -5,6 +5,7 @@
 ## Missing files
 
 The app & some tests use a `.env` file at the top level of the project folder, with contents:
+
 ```yml
 SPACE_ID: "<random_letters>\<name_you_chose>"
 API_KEY: "<its_a_secret>"
