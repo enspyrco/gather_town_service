@@ -1,6 +1,16 @@
 # gather_town_service
 
-- a service that processes Pub/Sub messages.
+*A node.js server on Cloud Run providing multiple ways to interact with Gather’s WebSocket API.*
+
+## Run tests
+
+### Typescript tests
+
+`npm run ts-test`
+
+### Javascript tests
+
+`npm test`
 
 ## Run & debug locally
 
