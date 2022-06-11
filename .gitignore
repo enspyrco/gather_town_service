@@ -1,3 +1,8 @@
 node_modules
-build
+dist
+
+// file containing space id and api key
 .env
+
+// build output file from tsc build
+tsconfig.tsbuildinfo
