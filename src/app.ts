@@ -5,10 +5,12 @@ export const app = express();
 
 app.use(express.json());
 
-const game = new Game(process.env.SPACE_ID, () => Promise.resolve({ apiKey: process.env.API_KEY ?? 'null' }));
+var game : Game;
 
 app.post('/', async (req, res, next) => {
   try {
+    game ??= new Game(process.env.SPACE_ID, () => Promise.resolve({ apiKey: process.env.API_KEY ?? 'null' }));
+
     if (!req.body) {
       const msg = 'no Pub/Sub message received';
       console.error(`error: ${msg}`);
