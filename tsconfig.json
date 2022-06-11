@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "composite": true, // enforces constraints which make it possible for build tools (including ts) to quickly determine if a project has been built yet
-    "outDir": "dist", // .js (as well as .d.ts, .js.map, etc.) files will be emitted into this directory.
+    "outDir": "build", // .js (as well as .d.ts, .js.map, etc.) files will be emitted into this directory.
+    "rootDir": "src", // specify the root folder within your source files.
     "sourceMap": true, // enables the generation of sourcemap files.
     "strict": true, // enables a wide range of type checking behavior that results in stronger guarantees of program correctness.
     "esModuleInterop": true, // emit additional JavaScript to ease support for importing CommonJS modules.
