@@ -10,9 +10,7 @@
       "name": "run & debug server",
       "program": "${workspaceFolder}/src/server.ts",
       "preLaunchTask": "tsc: build - tsconfig.json",
-      "outFiles": [
-        "${workspaceFolder}/dist/*.js"
-      ]
+      "outFiles": ["${workspaceFolder}/dist/*.js"]
     }
   ]
 }

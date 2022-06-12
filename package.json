@@ -10,7 +10,7 @@
     "start": "node dist/server.js",
     "dev": "nodemon --exec ts-node ./src --ext js,ts",
     "build": "rm -rf dist && tsc",
-    "test": ""
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@gathertown/gather-game-client": "^37.0.1",

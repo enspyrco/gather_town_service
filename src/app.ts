@@ -1,11 +1,11 @@
 import express from 'express';
-import { GameLocator } from './game-locator';
+import { GameLocator } from './utils/game-locator';
 
 export const app = express();
 
 app.use(express.json());
 
-app.post('/', async (req, res, next) => {
+app.post('/pubsub/', async (req, res, next) => {
   const game = GameLocator.getGame();
   try {
     if (!req.body) {
