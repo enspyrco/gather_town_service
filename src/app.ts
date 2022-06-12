@@ -1,15 +1,12 @@
-import { Game } from '@gathertown/gather-game-client';
 import express from 'express';
 import { GameLocator } from './game-locator';
 
 export const app = express();
 
-let game : Game;
-
 app.use(express.json());
 
 app.post('/', async (req, res, next) => {
-  game = GameLocator.getGame();
+  const game = GameLocator.getGame();
   try {
     if (!req.body) {
       const msg = 'no Pub/Sub message received';
