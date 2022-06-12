@@ -1,16 +1,16 @@
-import 'dotenv/config'
 import { Game } from '@gathertown/gather-game-client';
 import express from 'express';
+import { GameLocator } from './game-locator';
+
 export const app = express();
+
+let game : Game;
 
 app.use(express.json());
 
-var game : Game;
-
 app.post('/', async (req, res, next) => {
+  game = GameLocator.getGame();
   try {
-    game ??= new Game(process.env.SPACE_ID, () => Promise.resolve({ apiKey: process.env.API_KEY ?? 'null' }));
-
     if (!req.body) {
       const msg = 'no Pub/Sub message received';
       console.error(`error: ${msg}`);
