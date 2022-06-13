@@ -7,11 +7,11 @@
     "strict": true, // enables a wide range of type checking behavior that results in stronger guarantees of program correctness.
     "esModuleInterop": true, // emit additional JavaScript to ease support for importing CommonJS modules.
     "lib": ["esnext", "dom"], // specify a set of bundled library declaration files that describe the target runtime environment.
-    "incremental": true, // enable incremental compilation.
+    "incremental": true // enable incremental compilation.
   },
   "exclude": [
     "node_modules",
     "dist",
-    "test"
+    "__tests__"
   ]
 }

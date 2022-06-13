@@ -35,7 +35,7 @@ router.post('/', async (req: Request, res: Response, next) => {
     res.status(204).send();
   } catch (error) {
     // Passes errors into the error handler
-    return next(error)
+    return next(error);
   }
 });
 
