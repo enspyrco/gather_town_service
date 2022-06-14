@@ -24,7 +24,7 @@ router.post('/', async (req: Request, res: Response, next) => {
     if(!game.connected) await game.connect();
   
     // optional but helpful callback to track when the connection status changes
-    game.subscribeToConnection((connected) => console.log("connected?", connected));
+    game.subscribeToConnection((connected) => console.log('connected?', connected));
   
     const pubSubMessage = req.body.message;
     const name = pubSubMessage.data
