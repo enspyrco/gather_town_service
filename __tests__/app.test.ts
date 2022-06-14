@@ -1,8 +1,7 @@
 import { Game } from "@gathertown/gather-game-client";
 import request from "supertest";
+import ExpressApp from '../src/express-app';
 
-import { app } from "../src/app";
-import { GameLocator } from "../src/utils/game-locator";
 import { mock, instance, verify, when, anything } from 'ts-mockito';
 
 describe("Test app.ts", () => {
@@ -13,9 +12,10 @@ describe("Test app.ts", () => {
     when(mockedGame.connected).thenReturn(false);
     when(mockedGame.connect()).thenResolve();
     when(mockedGame.subscribeToConnection(anything)).thenReturn(() => {});
-    GameLocator.set(game);
     
-    const res =  await request(app).post("/pubsub").send({message: 'message'});
+    const express = new ExpressApp(game, 8080);
+
+    const res =  await request(express.app).post('/pubsub').send({message: 'message'});
     
     expect(res.body).toEqual({});
     

@@ -1,7 +1,10 @@
 global.WebSocket = require("isomorphic-ws");
-import { app } from './app';
-const PORT = (process.env.PORT && parseInt(process.env.PORT)) || 8080;
+import 'dotenv/config'
+import ExpressApp from './express-app';
+import { Game } from '@gathertown/gather-game-client';
 
-app.listen(PORT, () =>
-  console.log(`gather-town-service listening on port ${PORT}`)
-);
+const PORT = (process.env.PORT && parseInt(process.env.PORT)) || 8080;
+const game = new Game(process.env.SPACE_ID, () => Promise.resolve({ apiKey: process.env.API_KEY ?? 'null' }));
+
+const express = new ExpressApp(game, PORT);
+express.listen();
