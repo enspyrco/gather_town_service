@@ -8,11 +8,21 @@
       "type": "node",
       "request": "launch",
       "name": "run & debug server",
-      "program": "${workspaceFolder}/src/index.ts",
+      "program": "${workspaceFolder}/src/server.ts",
       "preLaunchTask": "tsc: build - tsconfig.json",
-      "outFiles": [
-        "${workspaceFolder}/dist/*.js"
-      ]
+      "outFiles": ["${workspaceFolder}/dist/*.js"]
+    },
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
     }
   ]
 }
