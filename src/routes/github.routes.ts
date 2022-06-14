@@ -1,17 +1,30 @@
-import { Router, Request, Response } from "express";
-// import { GameLocator } from '../utils/game-locator';
-
-const router = Router();
-
-router.post('/', async (req: Request, res: Response, next) => {
-  try {
-    // const game = GameLocator.getGame();
-    console.log(`Body:\n ${req.body}`);
-    res.status(204).send();
-  } catch (error) {
-    // Passes errors into the error handler
-    return next(error)
+import { Game } from "@gathertown/gather-game-client";
+import { Router, Request, Response, NextFunction } from "express";
+ 
+class GitHubRoutes {
+  public path = '/github';
+  public router: Router;
+  private game: Game;
+ 
+  constructor(game: Game) {
+    this.game = game;
+    this.router = Router();
+    this.intializeRoutes();
   }
-});
+ 
+  public intializeRoutes() {
+    this.router.post(this.path, this.handleGitHubMessage);
+  }
 
-export { router };
+  handleGitHubMessage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log(`Body:\n ${req.body}`);
+      res.status(204).send();
+    } catch (error) {
+      // Passes errors into the error handler
+      return next(error)
+    }
+  }
+}
+ 
+export default GitHubRoutes;
